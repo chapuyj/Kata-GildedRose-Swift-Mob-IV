@@ -1,0 +1,12 @@
+import XCTest
+import GildedRoseTests
+
+var tests = [XCTestCaseEntry]()
+
+{% for type in types.classes|based:"XCTestCase" %}
+{% if not type.annotations.disableTests %}
+tests += {{ type.name }}.allTests()
+{% endif %}
+{% endfor %}
+
+XCTMain(tests)

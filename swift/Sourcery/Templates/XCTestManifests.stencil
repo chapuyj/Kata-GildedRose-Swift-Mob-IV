@@ -1,0 +1,14 @@
+import XCTest
+import GildedRoseTests
+
+#if !canImport(ObjectiveC)
+public func allTests() -> [XCTestCaseEntry] {
+    return [
+        {% for type in types.classes|based:"XCTestCase" %}
+        {% if not type.annotations.disableTests %}
+        testCase({{ type.name }}.allTests(),
+        {% endif %}
+        {% endfor %}
+    ]
+}
+#endif

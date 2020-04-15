@@ -1,0 +1,6 @@
+sources:
+  - ./Tests
+templates:
+  - ./Sourcery/Templates
+output:
+  ./Sourcery/Generated
