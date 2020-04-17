@@ -4,56 +4,76 @@ public class GildedRose {
     public init(items:[Item]) {
         self.items = items
     }
-    
+
     public func updateQuality() {
-        for i in 0..<items.count {
-            if (items[i].name != "Aged Brie" && items[i].name != "Backstage passes to a TAFKAL80ETC concert") {
-                if (items[i].quality > 0) {
-                    if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-                        items[i].quality = items[i].quality - 1
-                    }
+        items.forEach { item in
+            if isLoosingQualityEachDay(item: item) {
+                if qualityCanBeDecreased(item: item) {
+                    decreaseQuality(item: item)
                 }
-            } else {
-                if (items[i].quality < 50) {
-                    items[i].quality = items[i].quality + 1
+            } else {         
+                increaseQuality(item: item)
+                
+                if isBackstagePasses(item: item) {
+                    if item.sellIn < 11 {
+                        increaseQuality(item: item)
+                    }
                     
-                    if (items[i].name == "Backstage passes to a TAFKAL80ETC concert") {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1
-                            }
-                        }
-                        
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1
-                            }
-                        }
+                    if item.sellIn < 6 {
+                        increaseQuality(item: item)
                     }
                 }
             }
-            
-            if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-                items[i].sellIn = items[i].sellIn - 1
+
+            if isLegendary(item: item) == false {
+                item.sellIn = item.sellIn - 1
             }
             
-            if (items[i].sellIn < 0) {
-                if (items[i].name != "Aged Brie") {
-                    if (items[i].name != "Backstage passes to a TAFKAL80ETC concert") {
-                        if (items[i].quality > 0) {
-                            if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-                                items[i].quality = items[i].quality - 1
+            if (item.sellIn < 0) {
+                if (item.name != "Aged Brie") {
+                    if isBackstagePasses(item: item) == false {
+                        if (item.quality > 0) {
+                            if isLegendary(item: item) == false {
+                                decreaseQuality(item: item)
                             }
                         }
                     } else {
-                        items[i].quality = items[i].quality - items[i].quality
+                        item.quality = item.quality - item.quality
                     }
-                } else {
-                    if (items[i].quality < 50) {
-                        items[i].quality = items[i].quality + 1
-                    }
+                } else {                  
+                    increaseQuality(item: item)                    
                 }
             }
         }
+    }
+
+    private func isLoosingQualityEachDay(item: Item) -> Bool {
+        return item.name != "Aged Brie" && isBackstagePasses(item: item) == false
+    }   
+
+    private func isLegendary(item: Item) -> Bool {
+        return item.name == "Sulfuras, Hand of Ragnaros"
+    }
+
+    private func isBackstagePasses(item: Item) -> Bool {
+        return item.name == "Backstage passes to a TAFKAL80ETC concert"
+    }
+
+    private func qualityCanBeDecreased(item: Item) -> Bool {
+        return item.quality > 0 && isLegendary(item: item) == false
+    }
+
+    private func decreaseQuality(item: Item) {
+        item.quality -= 1
+    }
+
+    private func increaseQuality(item: Item) {        
+        if hasNotReachedMaximumQuality(item: item) {
+            item.quality += 1
+        }
+    }
+
+    private func hasNotReachedMaximumQuality(item: Item) -> Bool {
+        return item.quality < 50
     }
 }
