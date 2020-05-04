@@ -5,12 +5,14 @@ public class GildedRose {
         self.items = items
     }
 
-    public func updateQuality() {
+    public func update() {
         items.forEach { item in
+
             if isLoosingQualityEachDay(item: item) {
-                if qualityCanBeDecreased(item: item) {
-                    decreaseQuality(item: item)
-                }
+                decreaseQuality(item: item)
+                    // if isConjured(item: item) {
+                    //     decreaseQuality(item: item)
+                    // }
             } else {         
                 increaseQuality(item: item)
                 
@@ -25,31 +27,40 @@ public class GildedRose {
                 }
             }
 
-            if isLegendary(item: item) == false {
-                item.sellIn = item.sellIn - 1
-            }
-            
-            if (item.sellIn < 0) {
-                if (item.name != "Aged Brie") {
-                    if isBackstagePasses(item: item) == false {
-                        if (item.quality > 0) {
-                            if isLegendary(item: item) == false {
-                                decreaseQuality(item: item)
-                            }
-                        }
-                    } else {
-                        item.quality = item.quality - item.quality
-                    }
-                } else {                  
-                    increaseQuality(item: item)                    
+            updateSellIn(item: item)
+
+            if isItemExpired(item: item) {
+                if isAgedBrie(item: item) {
+                    increaseQuality(item: item)   
+                } else if isBackstagePasses(item: item) {
+                    item.quality = 0
+                } else {
+                    decreaseQuality(item: item)
+                    // if isConjured(item: item) {
+                    //     decreaseQuality(item: item)
+                    // }
                 }
             }
         }
     }
 
+    private func updateSellIn(item: Item) {
+        if isLegendary(item: item) == false {
+            item.sellIn -= 1
+        }
+    }
+
+    private func isItemExpired(item: Item) -> Bool {
+        return item.sellIn < 0
+    }
+
     private func isLoosingQualityEachDay(item: Item) -> Bool {
-        return item.name != "Aged Brie" && isBackstagePasses(item: item) == false
+        return isAgedBrie(item: item) == false && isBackstagePasses(item: item) == false
     }   
+
+    private func isAgedBrie(item: Item) -> Bool {
+        return item.name == "Aged Brie"
+    }
 
     private func isLegendary(item: Item) -> Bool {
         return item.name == "Sulfuras, Hand of Ragnaros"
@@ -64,7 +75,9 @@ public class GildedRose {
     }
 
     private func decreaseQuality(item: Item) {
-        item.quality -= 1
+        if qualityCanBeDecreased(item: item) {
+            item.quality -= 1
+        }
     }
 
     private func increaseQuality(item: Item) {        

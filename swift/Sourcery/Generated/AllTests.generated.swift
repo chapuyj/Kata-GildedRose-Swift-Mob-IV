@@ -17,6 +17,7 @@ extension GildedRoseTests {
             ("testUpdateQuality_WithLegendaryItem_AndPositiveSellIn_ShouldNotChangeQualityNorSellIn", testUpdateQuality_WithLegendaryItem_AndPositiveSellIn_ShouldNotChangeQualityNorSellIn),
             ("testUpdateQuality_WithLegendaryItem_AndNegativeSellIn_ShouldNotChangeQualityNorSellIn", testUpdateQuality_WithLegendaryItem_AndNegativeSellIn_ShouldNotChangeQualityNorSellIn),
             ("testUpdateQuality_WithBackstagePasses_WithSellInGreaterThan10_ShouldIncreaseQualityByOne", testUpdateQuality_WithBackstagePasses_WithSellInGreaterThan10_ShouldIncreaseQualityByOne),
+            ("testUpdateQuality_WithBackstagePasses_WithSellInGreaterThan10_11_ShouldIncreaseQualityByOne", testUpdateQuality_WithBackstagePasses_WithSellInGreaterThan10_11_ShouldIncreaseQualityByOne),
             ("testUpdateQuality_WithBackstagePasses_WithSellInBetween10IncludedAnd5Excluded_ShouldIncreaseQualityByTwo", testUpdateQuality_WithBackstagePasses_WithSellInBetween10IncludedAnd5Excluded_ShouldIncreaseQualityByTwo),
             ("testUpdateQuality_WithBackstagePasses_WithSellInBetween5IncludedAnd0Excluded_SellIn5_ShouldIncreaseQualityByThree", testUpdateQuality_WithBackstagePasses_WithSellInBetween5IncludedAnd0Excluded_SellIn5_ShouldIncreaseQualityByThree),
             ("testUpdateQuality_WithBackstagePasses_WithSellInBetween5IncludedAnd0Excluded_SellIn1_ShouldIncreaseQualityByThree", testUpdateQuality_WithBackstagePasses_WithSellInBetween5IncludedAnd0Excluded_SellIn1_ShouldIncreaseQualityByThree),

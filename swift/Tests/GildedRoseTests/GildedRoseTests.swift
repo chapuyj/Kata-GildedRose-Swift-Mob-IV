@@ -11,7 +11,7 @@ class GildedRoseTests: XCTestCase {
         let items = [Item(name: "Aged Brie", sellIn: 2, quality: 0)]
         let app = GildedRose(items: items);
 
-        app.updateQuality();
+        app.update()
 
         XCTAssertEqual(1, app.items[0].sellIn);
         XCTAssertEqual(1, app.items[0].quality);
@@ -21,7 +21,7 @@ class GildedRoseTests: XCTestCase {
         let items = [Item(name: "Aged Brie", sellIn: -2, quality: 0)]
         let app = GildedRose(items: items);
 
-        app.updateQuality();
+        app.update()
 
         XCTAssertEqual(-3, app.items[0].sellIn);
         XCTAssertEqual(2, app.items[0].quality);
@@ -31,7 +31,7 @@ class GildedRoseTests: XCTestCase {
         let items = [Item(name: "Aged Brie", sellIn: -10, quality: 50)]
         let app = GildedRose(items: items);
 
-        app.updateQuality();
+        app.update()
 
         XCTAssertEqual(-11, app.items[0].sellIn);
         XCTAssertEqual(50, app.items[0].quality);
@@ -49,7 +49,7 @@ class GildedRoseTests: XCTestCase {
         ]
         let app = GildedRose(items: items);
 
-        app.updateQuality();
+        app.update()
 
         let expectedItemsAfterOneDay = [
             Item(name: "+5 Dexterity Vest", sellIn: 19, quality: 19),
@@ -70,7 +70,7 @@ class GildedRoseTests: XCTestCase {
         let items = [givenItem]
         let app = GildedRose(items: items)
 
-        app.updateQuality()
+        app.update()
 
         XCTAssertEqual(givenItem.name, items.first?.name)
         XCTAssertEqual(expectedSellIn, items.first?.sellIn)
@@ -123,6 +123,12 @@ class GildedRoseTests: XCTestCase {
         let item = Item(name: "Backstage passes to a TAFKAL80ETC concert", sellIn: 22, quality: 40)
 
         parametrizedTest_updateItem(givenItem: item, expectedSellIn: 21, expectedQuality: 41)
+    }
+
+    func testUpdateQuality_WithBackstagePasses_WithSellInGreaterThan10_11_ShouldIncreaseQualityByOne() {
+        let item = Item(name: "Backstage passes to a TAFKAL80ETC concert", sellIn: 11, quality: 40)
+
+        parametrizedTest_updateItem(givenItem: item, expectedSellIn: 10, expectedQuality: 41)
     }
 
     func testUpdateQuality_WithBackstagePasses_WithSellInBetween10IncludedAnd5Excluded_ShouldIncreaseQualityByTwo() {
