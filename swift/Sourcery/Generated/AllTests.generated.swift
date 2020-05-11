@@ -22,7 +22,9 @@ extension GildedRoseTests {
             ("testUpdateQuality_WithBackstagePasses_WithSellInBetween5IncludedAnd0Excluded_SellIn5_ShouldIncreaseQualityByThree", testUpdateQuality_WithBackstagePasses_WithSellInBetween5IncludedAnd0Excluded_SellIn5_ShouldIncreaseQualityByThree),
             ("testUpdateQuality_WithBackstagePasses_WithSellInBetween5IncludedAnd0Excluded_SellIn1_ShouldIncreaseQualityByThree", testUpdateQuality_WithBackstagePasses_WithSellInBetween5IncludedAnd0Excluded_SellIn1_ShouldIncreaseQualityByThree),
             ("testUpdateQuality_WithBackstagePasses_WithSellIn0_ShouldDropQualityTo0", testUpdateQuality_WithBackstagePasses_WithSellIn0_ShouldDropQualityTo0),
-            ("testUpdateQuality_WithBackstagePasses_WithSellInNegative_ShouldKeepQualityTo0", testUpdateQuality_WithBackstagePasses_WithSellInNegative_ShouldKeepQualityTo0)
+            ("testUpdateQuality_WithBackstagePasses_WithSellInNegative_ShouldKeepQualityTo0", testUpdateQuality_WithBackstagePasses_WithSellInNegative_ShouldKeepQualityTo0),
+            ("testUpdateQuality_WithConjuredItem_WithSellInPositive_ShouldDecreaseQualityTwiceAsFastAsNormalItems", testUpdateQuality_WithConjuredItem_WithSellInPositive_ShouldDecreaseQualityTwiceAsFastAsNormalItems),
+            ("testUpdateQuality_WithConjuredItem_WithSellIn0_ShouldDecreaseQualityTwiceAsFastAsNormalItems", testUpdateQuality_WithConjuredItem_WithSellIn0_ShouldDecreaseQualityTwiceAsFastAsNormalItems)
     ]
 }
 

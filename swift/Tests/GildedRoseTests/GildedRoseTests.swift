@@ -160,6 +160,21 @@ class GildedRoseTests: XCTestCase {
 
         parametrizedTest_updateItem(givenItem: item, expectedSellIn: -2, expectedQuality: 0)
     }
+
+    // conjured item
+    
+    func testUpdateQuality_WithConjuredItem_WithSellInPositive_ShouldDecreaseQualityTwiceAsFastAsNormalItems() {
+        let item = Item(name: "Conjured Mana Cake", sellIn: 20, quality: 16)
+
+        parametrizedTest_updateItem(givenItem: item, expectedSellIn: 19, expectedQuality: 14)
+    }
+
+    func testUpdateQuality_WithConjuredItem_WithSellIn0_ShouldDecreaseQualityTwiceAsFastAsNormalItems() {
+        let item = Item(name: "Conjured Mana Cake", sellIn: 0, quality: 16)
+
+        parametrizedTest_updateItem(givenItem: item, expectedSellIn: -1, expectedQuality: 12)
+    }
+    
 }
 
 //MARK:- Utils

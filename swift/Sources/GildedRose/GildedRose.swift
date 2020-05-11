@@ -7,12 +7,11 @@ public class GildedRose {
 
     public func update() {
         items.forEach { item in
-
             if isLoosingQualityEachDay(item: item) {
                 decreaseQuality(item: item)
-                    // if isConjured(item: item) {
-                    //     decreaseQuality(item: item)
-                    // }
+                    if isConjured(item: item) {
+                        decreaseQuality(item: item)
+                    }
             } else {         
                 increaseQuality(item: item)
                 
@@ -36,9 +35,9 @@ public class GildedRose {
                     item.quality = 0
                 } else {
                     decreaseQuality(item: item)
-                    // if isConjured(item: item) {
-                    //     decreaseQuality(item: item)
-                    // }
+                    if isConjured(item: item) {
+                        decreaseQuality(item: item)
+                    }
                 }
             }
         }
@@ -88,5 +87,9 @@ public class GildedRose {
 
     private func hasNotReachedMaximumQuality(item: Item) -> Bool {
         return item.quality < 50
+    }
+
+    private func isConjured(item: Item) -> Bool {
+        return item.name == "Conjured Mana Cake"
     }
 }
