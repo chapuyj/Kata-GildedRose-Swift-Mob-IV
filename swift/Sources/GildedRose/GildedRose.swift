@@ -5,39 +5,67 @@ public class GildedRose {
         self.items = items
     }
 
+    // updateQuality()
+    // Switch (name)
+    // -> updateQualityForAgeBrie()
+    // -> updateQualityForCommon()
+    // ...
+
+    //public func update() {
+    //  items.forEach { item in
+    //      item.updateSellin()
+    //      item.updateQuality()
+    //  }
+    //}
+
+    // items.map {
+    //    return item.update()
+
+    // items.map {
+    //    return Updator.update(item: item)
+
     public func update() {
         items.forEach { item in
-            if isLoosingQualityEachDay(item: item) {
-                decreaseQuality(item: item)
-                    if isConjured(item: item) {
-                        decreaseQuality(item: item)
-                    }
-            } else {         
-                increaseQuality(item: item)
+            if isConjured(item: item) {
+                item.updateQuality()
+                item.updateSellIn()
+            } else {
+                legacy_update(item: item)
+            }          
+        }
+    }
+
+    public func legacy_update(item: Item) {
+        if isLoosingQualityEachDay(item: item) {
+            decreaseQuality(item: item)
+                if isConjured(item: item) {
+                    decreaseQuality(item: item)
+                }
+        } else {         
+            increaseQuality(item: item)
+            
+            if isBackstagePasses(item: item) {
+                if item.sellIn < 11 {
+                    increaseQuality(item: item)
+                }
                 
-                if isBackstagePasses(item: item) {
-                    if item.sellIn < 11 {
-                        increaseQuality(item: item)
-                    }
-                    
-                    if item.sellIn < 6 {
-                        increaseQuality(item: item)
-                    }
+                if item.sellIn < 6 {
+                    increaseQuality(item: item)
                 }
             }
+        }
 
-            updateSellIn(item: item)
+        updateSellIn(item: item)
 
-            if isItemExpired(item: item) {
-                if isAgedBrie(item: item) {
-                    increaseQuality(item: item)   
-                } else if isBackstagePasses(item: item) {
-                    item.quality = 0
-                } else {
+        if isItemExpired(item: item) {
+            if isAgedBrie(item: item) {
+                increaseQuality(item: item)   
+            } else if isBackstagePasses(item: item) {
+                item.quality = 0
+            } else {
+                decreaseQuality(item: item)
+                if isConjured(item: item) {
                     decreaseQuality(item: item)
-                    if isConjured(item: item) {
-                        decreaseQuality(item: item)
-                    }
                 }
             }
         }
@@ -91,5 +119,51 @@ public class GildedRose {
 
     private func isConjured(item: Item) -> Bool {
         return item.name == "Conjured Mana Cake"
+    }
+}
+
+//MARK:- Update Item
+
+private extension Item {
+
+    func updateQuality() {
+        if isConjured {
+            updateQualityForConjuredItem()
+        }
+    }   
+
+    private func updateQualityForConjuredItem() {
+        if isExpired { 
+            quality -= 4
+        } else {
+            quality -= 2
+        } 
+    }
+
+    func updateSellIn() {
+        guard isLegendary == false else { return }
+        sellIn -= 1
+    } 
+}
+
+//MARK:- Item Kind
+
+private extension Item {
+
+    var isLegendary: Bool {
+        return name == "Sulfuras, Hand of Ragnaros"
+    }
+
+    var isConjured: Bool {
+        return name == "Conjured Mana Cake"
+    }
+}
+
+//MARK:- Item State
+
+private extension Item {
+
+    var isExpired: Bool {
+        return sellIn <= 0
     }
 }
