@@ -26,99 +26,9 @@ public class GildedRose {
 
     public func update() {
         items.forEach { item in
-            if isConjured(item: item) {
-                item.updateQuality()
-                item.updateSellIn()
-            } else {
-                legacy_update(item: item)
-            }          
+            item.updateQuality()
+            item.updateSellIn()         
         }
-    }
-
-    public func legacy_update(item: Item) {
-        if isLoosingQualityEachDay(item: item) {
-            decreaseQuality(item: item)
-                if isConjured(item: item) {
-                    decreaseQuality(item: item)
-                }
-        } else {         
-            increaseQuality(item: item)
-            
-            if isBackstagePasses(item: item) {
-                if item.sellIn < 11 {
-                    increaseQuality(item: item)
-                }
-                
-                if item.sellIn < 6 {
-                    increaseQuality(item: item)
-                }
-            }
-        }
-
-        updateSellIn(item: item)
-
-        if isItemExpired(item: item) {
-            if isAgedBrie(item: item) {
-                increaseQuality(item: item)   
-            } else if isBackstagePasses(item: item) {
-                item.quality = 0
-            } else {
-                decreaseQuality(item: item)
-                if isConjured(item: item) {
-                    decreaseQuality(item: item)
-                }
-            }
-        }
-    }
-
-    private func updateSellIn(item: Item) {
-        if isLegendary(item: item) == false {
-            item.sellIn -= 1
-        }
-    }
-
-    private func isItemExpired(item: Item) -> Bool {
-        return item.sellIn < 0
-    }
-
-    private func isLoosingQualityEachDay(item: Item) -> Bool {
-        return isAgedBrie(item: item) == false && isBackstagePasses(item: item) == false
-    }   
-
-    private func isAgedBrie(item: Item) -> Bool {
-        return item.name == "Aged Brie"
-    }
-
-    private func isLegendary(item: Item) -> Bool {
-        return item.name == "Sulfuras, Hand of Ragnaros"
-    }
-
-    private func isBackstagePasses(item: Item) -> Bool {
-        return item.name == "Backstage passes to a TAFKAL80ETC concert"
-    }
-
-    private func qualityCanBeDecreased(item: Item) -> Bool {
-        return item.quality > 0 && isLegendary(item: item) == false
-    }
-
-    private func decreaseQuality(item: Item) {
-        if qualityCanBeDecreased(item: item) {
-            item.quality -= 1
-        }
-    }
-
-    private func increaseQuality(item: Item) {        
-        if hasNotReachedMaximumQuality(item: item) {
-            item.quality += 1
-        }
-    }
-
-    private func hasNotReachedMaximumQuality(item: Item) -> Bool {
-        return item.quality < 50
-    }
-
-    private func isConjured(item: Item) -> Bool {
-        return item.name == "Conjured Mana Cake"
     }
 }
 
@@ -128,17 +38,51 @@ private extension Item {
 
     func updateQuality() {
         if isConjured {
-            updateQualityForConjuredItem()
-        }
-    }   
-
-    private func updateQualityForConjuredItem() {
-        if isExpired { 
-            quality -= 4
+            decreaseQuality(whenExpired: 4, nominal: 2)
+        } else if isAgedBrie {
+            increaseQuality(whenExpired: 2, nominal: 1)
+        } else if isBackstagePasses {
+            updateBackstagePassesQuality()
+        } else if isLegendary {
+            doNotChange()
         } else {
-            quality -= 2
-        } 
+            decreaseQuality(whenExpired: 2, nominal: 1)
+        }
     }
+
+    private func decreaseQuality(whenExpired: Int, nominal: Int) { 
+        let decrementValue = isExpired ? whenExpired : nominal
+        quality = max(0, quality - decrementValue)        
+    }   
+    
+    private func increaseQuality(by value: Int) {
+        quality = min(50, quality + value)
+    }
+
+    private func increaseQuality(whenExpired: Int, nominal: Int) { 
+        let incrementValue = isExpired ? whenExpired : nominal
+        increaseQuality(by: incrementValue)    
+    }
+
+    private func updateBackstagePassesQuality() {
+        if isExpired {
+            quality = 0
+            return
+        }
+        
+        let incrementValue: Int
+        switch sellIn {
+            case 1...5:
+                incrementValue = 3
+            case 6...10:
+                incrementValue = 2
+            default:
+                incrementValue = 1
+        }
+        increaseQuality(by: incrementValue)
+    }
+
+    private func doNotChange() {}
 
     func updateSellIn() {
         guard isLegendary == false else { return }
@@ -156,6 +100,14 @@ private extension Item {
 
     var isConjured: Bool {
         return name == "Conjured Mana Cake"
+    }
+
+    var isAgedBrie: Bool {
+        return name == "Aged Brie"
+    }
+
+    var isBackstagePasses: Bool {
+        return name == "Backstage passes to a TAFKAL80ETC concert"
     }
 }
 
